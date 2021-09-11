@@ -20,19 +20,19 @@ class ViewController: UIViewController {
     @IBOutlet weak var secondsRemainFixedLbl: UILabel!
     @IBOutlet weak var stopBtn: UIButton!
     
-    //    let eggTimes: [String : Int] = [
-//        "Soft" : 300,
-//        "Medium" :420,
-//        "Hard" : 720
-//    ]
+        let eggTimes: [String : Int] = [
+        "Soft" : 300,
+        "Medium" :420,
+        "Hard" : 720
+    ]
     
-    //Shosrter times for testing purposes!
+    //Shorter times for testing purposes!
     //2 B removed!
-    let eggTimes: [String : Float] = [
-          "Soft" : 3,
-          "Medium" :4,
-          "Hard" : 7
-      ]
+//    let eggTimes: [String : Float] = [
+//          "Soft" : 3,
+//          "Medium" :4,
+//          "Hard" : 7
+//      ]
     
     var secondsRemaining: Float = 60
     var timer = Timer()
@@ -98,13 +98,22 @@ class ViewController: UIViewController {
                     }
     }
     
+    
+    func secondsToHoursMinutesSeconds (seconds : Int) -> (Int, Int, Int) {
+      return (seconds / 3600, (seconds % 3600) / 60, (seconds % 3600) % 60)
+    }
+    
+    
     @objc func updateCounter() {
         //sets and updates progress bar as seconds go by
         progress = secondsRemaining / fullTime
         progressBar.progress = progress
         
         if secondsRemaining > 0 {
-            secondsRemainingLabel.text = "\(Int(secondsRemaining))"
+            let (_,m,s) = secondsToHoursMinutesSeconds(seconds: Int(secondsRemaining))
+            
+            secondsRemainingLabel.text = "\(m) Min : \(s) Sec"
+            //secondsRemainingLabel.text = "\(Int(secondsRemaining))"
             print("\(Int(secondsRemaining)) seconds.")
             secondsRemaining -= 1
         } else {
@@ -126,8 +135,8 @@ class ViewController: UIViewController {
         let hardness: String = sender.currentTitle!
         
         titleLabel.text = "Cooking \(hardness.lowercased()) eggs!"
-        secondsRemaining = eggTimes[hardness]!
-        fullTime = eggTimes[hardness]!
+        secondsRemaining = Float(eggTimes[hardness]!)
+        fullTime = Float(eggTimes[hardness]!)
         
         timer.invalidate()
         
